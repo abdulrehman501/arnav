@@ -1,0 +1,6 @@
+# Python backend dependencies (Sami's domain)
+fastapi
+uvicorn[standard]
+numpy
+scipy
+opencv-python

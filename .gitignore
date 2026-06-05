@@ -1,0 +1,85 @@
+# ============================================================
+#  AR Navigation — combined .gitignore (Unity + Python)
+# ============================================================
+
+# ----------------------------
+#  Unity (auto-generated, must NOT be committed)
+#  Patterns are unanchored so they match unity/arnav-unity/...
+# ----------------------------
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+[Mm]emoryCaptures/
+[Rr]ecordings/
+
+# Asset meta data should only be ignored when the corresponding asset is also ignored
+!/[Aa]ssets/**/*.meta
+
+# Unity3D generated files
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+
+# Unity build outputs
+*.apk
+*.aab
+*.unitypackage
+*.app
+sysinfo.txt
+crashlytics-build.properties
+
+# Visual Studio / Rider caches
+.vs/
+.vsconfig
+.idea/
+.gradle/
+ExportedObj/
+*.stackdump
+
+# ----------------------------
+#  Python (Sami's domain)
+# ----------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+env/
+ENV/
+.env
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ----------------------------
+#  OS / editor noise
+# ----------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
