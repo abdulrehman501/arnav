@@ -1,54 +1,28 @@
-# API Contract — `GET /nav`
+## Integration point btw backend and unity app
 
-This is the single integration point between the Python backend and the Unity app.
-Both sides MUST honour this shape. Any change here must be agreed by Sami **and** Rehman.
+# Endpoint
 
-## Endpoint
+ endpoint-->/nav 
+ method-->get  
+ URL--->[here ngrok url]/nav 
+ header-->ngrok-skip-browser-warning: true
 
-```
-GET http://<server-ip>:8000/nav
-```
+# Schema 
+| Heading       | Type   | Units   | Range               | Description                            |
+| ------------- | ------ | ------- | ------------------- | -------------------------------------- |
+| **heading**   | float  | degrees | 0–360               | Compass direction the device is facing |
+| **pitch**     | float  | degrees | -90–90              | Forward/backward tilt of the device    |
+| **roll**      | float  | degrees | -180–180            | Left/right tilt of the device          |
+| **distance**  | float  | metres  | 0–∞                 | Straight-line distance to target       |
+| **bearing**   | float  | degrees | 0–360               | Angle from North to target             |
+| **direction** | string | —       | left/right/straight | Turn instruction for the user          |
 
-- Server and phone must be on the **same WiFi network**.
-- `<server-ip>` is the LAN IP of the machine running the Python server (e.g. `192.168.1.42`).
-
-## Response — `200 OK`, `application/json`
-
-```json
-{
-  "heading":   0.0,
-  "pitch":     0.0,
-  "roll":      0.0,
-  "distance":  0.0,
-  "bearing":   0.0,
-  "direction": "straight"
+# Sample Response 
+ {
+  "heading": 9.46,
+  "pitch": -0.58,
+  "roll": 1.17,
+  "distance": 1903.93,
+  "bearing": 56.7,
+  "direction": "right"
 }
-```
-
-## Field definitions
-
-| Field       | Type   | Unit / Range            | Meaning |
-|-------------|--------|-------------------------|---------|
-| `heading`   | float  | degrees, 0–360          | Device compass heading (yaw), from sensor fusion |
-| `pitch`     | float  | degrees, -90 to +90     | Device tilt up/down |
-| `roll`      | float  | degrees, -180 to +180   | Device tilt left/right |
-| `distance`  | float  | metres, ≥ 0             | Distance remaining to the next waypoint |
-| `bearing`   | float  | degrees, 0–360          | Compass direction to the next waypoint |
-| `direction` | string | enum (see below)        | Discrete turn instruction for the AR arrow |
-
-### `direction` enum
-
-| Value      | Arrow shows |
-|------------|-------------|
-| `straight` | forward |
-| `left`     | turn left |
-| `right`    | turn right |
-| `arrive`   | destination reached |
-
-## Notes / open questions (resolve with Sami)
-
-- Polling rate: how often should Unity call `/nav`? (proposed: ~5–10 Hz)
-- Coordinate frame: is `bearing` true-north or magnetic?
-- Error / no-route response shape (e.g. `direction: "none"`?)
-
-> Status: **DRAFT** — confirm with Sami before relying on it.
