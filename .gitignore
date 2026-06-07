@@ -15,6 +15,7 @@
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
 [Rr]ecordings/
+.utmp/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -75,6 +76,11 @@ ENV/
 .pytest_cache/
 .mypy_cache/
 .ipynb_checkpoints/
+
+# ----------------------------
+#  Local-only (not shared)
+# ----------------------------
+CLAUDE.md
 
 # ----------------------------
 #  OS / editor noise

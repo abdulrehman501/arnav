@@ -1,54 +1,84 @@
-# API Contract — `GET /nav`
+# API Contract — Integration point between backend and Unity app
 
-This is the single integration point between the Python backend and the Unity app.
-Both sides MUST honour this shape. Any change here must be agreed by Sami **and** Rehman.
+Both sides MUST honour these shapes. Any change here must be agreed by **Sami** and **Rehman**.
 
-## Endpoint
+> **Base URL:** Sami's current ngrok tunnel, e.g. `https://<sub>.ngrok-free.dev`.
+> On the free tier this **changes every time the tunnel restarts** — do not hardcode it; keep it in one editable field. Get the current URL from Sami.
+> Every request must send the header `ngrok-skip-browser-warning: true`, or ngrok returns an HTML warning page instead of JSON.
+
+---
+
+## 1. `GET /nav` — get navigation result
 
 ```
-GET http://<server-ip>:8000/nav
+GET  [ngrok-url]/nav
+header:  ngrok-skip-browser-warning: true
 ```
 
-- Server and phone must be on the **same WiFi network**.
-- `<server-ip>` is the LAN IP of the machine running the Python server (e.g. `192.168.1.42`).
+### Schema
 
-## Response — `200 OK`, `application/json`
+| Field       | Type   | Units   | Range               | Description                            |
+| ----------- | ------ | ------- | ------------------- | -------------------------------------- |
+| `heading`   | float  | degrees | 0–360               | Compass direction the device is facing |
+| `pitch`     | float  | degrees | -90–90              | Forward/backward tilt of the device    |
+| `roll`      | float  | degrees | -180–180            | Left/right tilt of the device          |
+| `distance`  | float  | metres  | 0–∞                 | Straight-line distance to target       |
+| `bearing`   | float  | degrees | 0–360               | Angle from North to target             |
+| `direction` | string | —       | left / right / straight / arrive | Turn instruction for the user |
+
+### Sample response
 
 ```json
 {
-  "heading":   0.0,
-  "pitch":     0.0,
-  "roll":      0.0,
-  "distance":  0.0,
-  "bearing":   0.0,
-  "direction": "straight"
+  "heading": 9.46,
+  "pitch": -0.58,
+  "roll": 1.17,
+  "distance": 1903.93,
+  "bearing": 56.7,
+  "direction": "right"
 }
 ```
 
-## Field definitions
+---
 
-| Field       | Type   | Unit / Range            | Meaning |
-|-------------|--------|-------------------------|---------|
-| `heading`   | float  | degrees, 0–360          | Device compass heading (yaw), from sensor fusion |
-| `pitch`     | float  | degrees, -90 to +90     | Device tilt up/down |
-| `roll`      | float  | degrees, -180 to +180   | Device tilt left/right |
-| `distance`  | float  | metres, ≥ 0             | Distance remaining to the next waypoint |
-| `bearing`   | float  | degrees, 0–360          | Compass direction to the next waypoint |
-| `direction` | string | enum (see below)        | Discrete turn instruction for the AR arrow |
+## 2. `POST /sensors` — upload phone sensor data
 
-### `direction` enum
+Unity reads the phone's raw sensors and sends them to the server (~1 Hz). The
+server uses these for fusion and navigation.
 
-| Value      | Arrow shows |
-|------------|-------------|
-| `straight` | forward |
-| `left`     | turn left |
-| `right`    | turn right |
-| `arrive`   | destination reached |
+```
+POST [ngrok-url]/sensors
+header:  ngrok-skip-browser-warning: true
+header:  Content-Type: application/json
+```
 
-## Notes / open questions (resolve with Sami)
+### Request body
 
-- Polling rate: how often should Unity call `/nav`? (proposed: ~5–10 Hz)
-- Coordinate frame: is `bearing` true-north or magnetic?
-- Error / no-route response shape (e.g. `direction: "none"`?)
+```json
+{
+  "accel": [x, y, z],
+  "mag":   [x, y, z],
+  "gps":   [lat, lon]
+}
+```
 
-> Status: **DRAFT** — confirm with Sami before relying on it.
+| Field   | Type        | Description                          |
+| ------- | ----------- | ------------------------------------ |
+| `accel` | float[3]    | Accelerometer x, y, z                |
+| `mag`   | float[3]    | Magnetometer x, y, z                 |
+| `gps`   | float[2]    | GPS latitude, longitude              |
+
+### Response
+
+```json
+{ "status": "ok" }
+```
+
+---
+
+## Open questions (resolve with Sami)
+
+- Units for `accel` (m/s²?) and `mag` (µT?) — confirm.
+- POST rate: confirmed ~1 Hz (once per second)?
+- `bearing` / `heading`: true-north or magnetic?
+- Error / no-route response shape for `/nav`?
