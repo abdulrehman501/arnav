@@ -1119,6 +1119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 276504499}
   - component: {fileID: 276504498}
+  - component: {fileID: 276504500}
   m_Layer: 0
   m_Name: NavHUD
   m_TagString: Untagged
@@ -1154,6 +1155,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &276504500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 276504497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b072f277474827a4eb6d82876591221c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FrameUploader
+  nav: {fileID: 0}
+  cameraManager: {fileID: 0}
+  interval: 2.5
+  downscale: 2
+  jpgQuality: 50
 --- !u!1001 &331264285
 PrefabInstance:
   m_ObjectHideFlags: 0
