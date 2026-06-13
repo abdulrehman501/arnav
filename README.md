@@ -1,15 +1,15 @@
 # ARNAV — AR Navigation
 
 An augmented-reality navigation prototype. The phone camera shows the real world with
-AR direction arrows overlaid on it. A Python backend fuses phone sensor data and serves
-navigation instructions; the Unity app renders them in AR.
+an AR chevron path and navigation cues overlaid on it. A Python backend fuses phone sensor
+data and serves navigation instructions; the Unity app renders them in AR.
 
 ## Architecture (at a glance)
 
 ```
   Unity (AR Foundation + ARCore)        Python (FastAPI)
   ┌──────────────────────────┐  HTTP   ┌──────────────────────┐
-  │ phone camera + AR arrows │ ◄─────► │ sensor fusion        │
+  │ phone camera + AR path   │ ◄─────► │ sensor fusion         │
   │ reads /nav JSON          │  JSON   │ serves navigation     │
   └──────────────────────────┘         └──────────────────────┘
             │ builds .apk
@@ -21,9 +21,9 @@ navigation instructions; the Unity app renders them in AR.
 
 | Path | Owner | Purpose |
 |------|-------|---------|
-| `python/`            | Sami   | Sensor fusion + FastAPI server |
-| `unity/arnav-unity/` | Rehman | Unity AR project |
-| `docs/`              | Shared | Architecture + API contract |
+| `python/`            | Backend  | Sensor fusion + FastAPI server |
+| `unity/arnav-unity/` | Frontend | Unity AR project |
+| `docs/`              | Shared   | Architecture + API contract |
 
 ## The seam between the two halves
 
@@ -34,8 +34,8 @@ As long as both sides honour that contract, they can be developed independently.
 ## Branches
 
 - `main` — integration branch
-- `rehman-unity` — Rehman's Unity work
-- (Sami's Python work branch as agreed)
+- `rehman-unity` — frontend (Unity) work
+- `backend` — backend (Python server) work
 
 ## Getting started
 
