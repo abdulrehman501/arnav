@@ -5,11 +5,11 @@ using UnityEngine.XR.ARSubsystems;
 using Unity.XR.CoreUtils;
 
 // Lays a row of chevrons on the real detected floor, in front of the user,
-// pointing the way and leaning by the /nav direction. World-anchored to the
-// ground via AR raycast, so it stays on the surface instead of floating.
+// pointing the way and leaning by the RouteController's current step direction.
+// World-anchored to the ground via AR raycast, so it stays on the surface.
 public class ChevronPath : MonoBehaviour
 {
-    public NavClient nav;
+    public RouteController route;
     public GameObject chevronPrefab;
     public int count = 6;
     public float spacing = 0.5f;
@@ -29,16 +29,28 @@ public class ChevronPath : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        if (route == null) route = FindAnyObjectByType<RouteController>();
 
-        raycaster = FindFirstObjectByType<ARRaycastManager>();
+        raycaster = FindAnyObjectByType<ARRaycastManager>();
         if (raycaster == null)
         {
-            var origin = FindFirstObjectByType<XROrigin>();
+            var origin = FindAnyObjectByType<XROrigin>();
             if (origin != null) raycaster = origin.gameObject.AddComponent<ARRaycastManager>();
         }
 
         // detach from the camera so the path lives in world space, not glued to the screen
         transform.SetParent(null, true);
+
+        // hide the detected-plane visuals (the white dots) so they don't bury the chevrons;
+        // detection still runs for the raycast, we just stop rendering the dots/feather.
+        var planeManager = FindAnyObjectByType<ARPlaneManager>();
+        if (planeManager != null)
+        {
+            planeManager.planePrefab = null;
+            foreach (var plane in planeManager.trackables)
+                foreach (var rend in plane.GetComponentsInChildren<Renderer>())
+                    rend.enabled = false;
+        }
 
         chevrons = new Transform[count];
         for (int i = 0; i < count; i++)
@@ -79,13 +91,13 @@ public class ChevronPath : MonoBehaviour
     {
         if (cam == null) cam = Camera.main;
 
-        // colour feedback: green when on the path, red when drifting (turn to correct)
-        string cdir = (nav != null && nav.HasData && nav.Latest != null) ? nav.Latest.direction : "straight";
+        // colour feedback: green going straight / arrived, red at a turn (lean to that side)
+        string cdir = (route != null && route.HasRoute && !route.Arrived) ? route.CurrentDirection : "straight";
         if (cdir != lastColorDir)
         {
             lastColorDir = cdir;
-            bool off = (cdir == "left" || cdir == "right");
-            ApplyColor(off ? offCourse : onCourse);
+            bool turn = (cdir == "left" || cdir == "right");
+            ApplyColor(turn ? offCourse : onCourse);
         }
 
         // place the whole path on the floor straight ahead of the user
@@ -95,15 +107,15 @@ public class ChevronPath : MonoBehaviour
             if (raycaster.Raycast(screenPt, hits, TrackableType.PlaneWithinPolygon))
             {
                 Pose hit = hits[0].pose;
-                transform.position = hit.position + Vector3.up * 0.02f;
+                transform.position = hit.position + Vector3.up * 0.06f;
 
                 Vector3 fwd = cam.transform.forward;
                 fwd.y = 0f;
                 if (fwd.sqrMagnitude < 0.0001f) fwd = Vector3.forward;
                 Quaternion baseRot = Quaternion.LookRotation(fwd.normalized, Vector3.up);
 
-                float yaw = (nav != null && nav.HasData && nav.Latest != null)
-                    ? TargetYaw(nav.Latest.direction) : 0f;
+                float yaw = (route != null && route.HasRoute && !route.Arrived)
+                    ? TargetYaw(route.CurrentDirection) : 0f;
                 Quaternion target = baseRot * Quaternion.Euler(0f, yaw, 0f);
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, turnSpeed * Time.deltaTime);
             }

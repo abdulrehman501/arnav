@@ -1119,8 +1119,6 @@ GameObject:
   m_Component:
   - component: {fileID: 276504499}
   - component: {fileID: 276504498}
-  - component: {fileID: 276504500}
-  - component: {fileID: 276504501}
   m_Layer: 0
   m_Name: NavHUD
   m_TagString: Untagged
@@ -1140,7 +1138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f54e7cacbb1541548a27c8e92bd3523e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NavHUD
-  nav: {fileID: 0}
+  route: {fileID: 1988311394}
 --- !u!4 &276504499
 Transform:
   m_ObjectHideFlags: 0
@@ -1156,36 +1154,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &276504500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 276504497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b072f277474827a4eb6d82876591221c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FrameUploader
-  nav: {fileID: 0}
-  cameraManager: {fileID: 0}
-  interval: 2.5
-  downscale: 2
-  jpgQuality: 50
---- !u!114 &276504501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 276504497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6afe4d560f2f8f2439ed89210c25910d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TargetSender
-  nav: {fileID: 0}
 --- !u!1001 &331264285
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2053,98 +2021,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 450, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &608830356
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 608830358}
-  - component: {fileID: 608830357}
-  - component: {fileID: 608830360}
-  - component: {fileID: 608830359}
-  - component: {fileID: 608830361}
-  m_Layer: 0
-  m_Name: SensorUploader
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &608830357
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608830356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d719ed55fa7633149b5fd4e31edf00f7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SensorUploader
-  baseUrl: https://tastiness-silly-strife.ngrok-free.dev
-  sendInterval: 1
---- !u!4 &608830358
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608830356}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.3, y: 0.14, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &608830359
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608830356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5df7dedfa3c74064d9688ad2a7eb9d84, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ArrowController
-  nav: {fileID: 608830360}
-  arrow: {fileID: 0}
-  turnSpeed: 5
---- !u!114 &608830360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608830356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 77c5f69fd2d4b9244bffd8f20d74c857, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::NavClient
-  baseUrl: https://tastiness-silly-strife.ngrok-free.dev
-  pollInterval: 0.5
---- !u!114 &608830361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608830356}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 57999294db8e35d4180e3566ee52bc21, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DistanceLabel
-  nav: {fileID: 608830360}
-  label: {fileID: 1553874405}
 --- !u!1 &637151521 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5963138107579739024, guid: 02644bbd28622410a84cf154fc436b8a, type: 3}
@@ -4853,7 +4729,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1bfd3e983896ce41be55137d88e5e98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ChevronPath
-  nav: {fileID: 608830360}
+  route: {fileID: 1988311394}
   chevronPrefab: {fileID: 8731101454412625871, guid: 4e788035504ebeb459f1795a752e51be, type: 3}
   count: 6
   spacing: 0.5
@@ -7631,6 +7507,82 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1988311393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1988311395}
+  - component: {fileID: 1988311394}
+  - component: {fileID: 1988311397}
+  - component: {fileID: 1988311396}
+  m_Layer: 0
+  m_Name: Nav
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1988311394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988311393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc6f7ba47eaaf144e9d6ba7b77c88a94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RouteController
+  useTestRoute: 1
+  maxStepDelta: 0.5
+--- !u!4 &1988311395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988311393}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0, z: -0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1988311396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988311393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 542fabc2815476e489cc5e5bf3af31cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestinationPicker
+  map: {fileID: 0}
+  route: {fileID: 0}
+  startNode: ENTRANCE
+--- !u!114 &1988311397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1988311393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 277c710314179f54aa6ceab238ab254c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapClient
+  baseUrl: 'http://localhost:8000'
 --- !u!114 &2001374502 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6402244310720262706, guid: 48cb3fb68c91eb94999fd99957eb0cae, type: 3}
@@ -8839,6 +8791,6 @@ SceneRoots:
   - {fileID: 1323550134}
   - {fileID: 2099970469}
   - {fileID: 331264285}
-  - {fileID: 608830358}
   - {fileID: 1463083342}
   - {fileID: 276504499}
+  - {fileID: 1988311395}

@@ -91,3 +91,6 @@ desktop.ini
 *.log
 _Recovery/
 docs/learning/
+
+# personal handoff note — local-only, travels in the transfer zip, never on GitHub
+START-HERE.md
