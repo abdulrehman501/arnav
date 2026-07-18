@@ -18,12 +18,22 @@ public class DestinationPicker : MonoBehaviour
     TextMeshProUGUI status;
     RectTransform list;
     GameObject uiRoot;   // the picker's own canvas — hide this, not the shared GameObject
+    QRScanner scanner;
+    bool started;        // becomes true once a start node is set (by QR scan, or typed)
 
     void Start()
     {
         if (map == null) map = FindAnyObjectByType<MapClient>();
         if (route == null) route = FindAnyObjectByType<RouteController>();
+
+        scanner = FindAnyObjectByType<QRScanner>();
+        if (scanner == null) scanner = gameObject.AddComponent<QRScanner>();
+        scanner.OnScanned += OnScan;
+
         BuildUI();
+        list.gameObject.SetActive(false);                  // destinations stay hidden until you scan in
+        SetStatus("scan the entrance QR code to begin");
+
         if (map != null) StartCoroutine(map.GetRooms(OnRooms));
     }
 
@@ -49,9 +59,10 @@ public class DestinationPicker : MonoBehaviour
         panel.anchoredPosition = new Vector2(0f, 40f);
         panel.sizeDelta = new Vector2(1000f, 620f);
 
-        startInput = MakeInput("StartInput", panel, new Vector2(0f, 520f), "start node");
-        startInput.text = startNode;
+        startInput = MakeInput("StartInput", panel, new Vector2(0f, 520f), "scan QR, or type a start node");
+        startInput.text = "";
         startInput.onValueChanged.AddListener(v => startNode = v);
+        startInput.onEndEdit.AddListener(Begin);           // typing a start + enter begins too (test fallback)
 
         status = MakeLabel("Status", panel, 30, "loading rooms…", TextAlignmentOptions.Center);
         var srt = status.rectTransform;
@@ -70,14 +81,32 @@ public class DestinationPicker : MonoBehaviour
 
     void OnRooms(string[] rooms)
     {
-        if (rooms == null || rooms.Length == 0) { SetStatus("no rooms (server up?)"); return; }
-        SetStatus("pick a destination");
+        // buttons are built into the (initially hidden) list; they appear once Begin() shows it
+        if (rooms == null || rooms.Length == 0) { if (started) SetStatus("no rooms (server up?)"); return; }
         float y = 440f - 84f;
         foreach (var room in rooms)
         {
             MakeRoomButton(room, y);
             y -= 96f;
         }
+        if (started) SetStatus("pick a destination");
+    }
+
+    // QR scan (or a typed start) sets where we're starting from and reveals the destinations.
+    void OnScan(string text)
+    {
+        if (startInput != null) startInput.text = text;
+        Begin(text);
+    }
+
+    void Begin(string start)
+    {
+        if (started || string.IsNullOrEmpty(start)) return;
+        startNode = start;
+        started = true;
+        if (scanner != null) scanner.Stop();
+        if (list != null) list.gameObject.SetActive(true);
+        SetStatus("you are at " + start + " — pick a destination");
     }
 
     void MakeRoomButton(string room, float y)
