@@ -11,6 +11,7 @@ public class RouteController : MonoBehaviour
     {
         public string direction;
         public float distance;
+        public float bearing;   // map-space direction of this leg (0 = map east, 90 = map north)
     }
 
     [System.Serializable]
@@ -29,10 +30,13 @@ public class RouteController : MonoBehaviour
     public bool Arrived { get; private set; }
     public int StepIndex { get; private set; }
     public int StepCount => steps != null ? steps.Length : 0;
+    public int RouteVersion { get; private set; }   // bumps on each LoadRoute, so the aligner re-arms
 
     // current instruction + how far is left on it (metres), for the chevrons and the HUD
     public string CurrentDirection =>
         (HasRoute && !Arrived && steps != null && StepIndex < steps.Length) ? steps[StepIndex].direction : "straight";
+    public float CurrentBearing =>
+        (HasRoute && !Arrived && steps != null && StepIndex < steps.Length) ? steps[StepIndex].bearing : 0f;
     public float RemainingDistance =>
         (HasRoute && !Arrived && steps != null && StepIndex < steps.Length)
             ? Mathf.Max(0f, steps[StepIndex].distance - walked) : 0f;
@@ -40,6 +44,7 @@ public class RouteController : MonoBehaviour
     Step[] steps;
     float walked;          // metres covered on the current step (displacement, see Update)
     Camera cam;
+    MapAligner aligner;
     Vector3 stepStartPos;  // where the current leg began (horizontal anchor)
     Vector3 lastCamPos;
     bool hasAnchor;
@@ -47,6 +52,8 @@ public class RouteController : MonoBehaviour
     void Start()
     {
         cam = Camera.main;
+        aligner = FindAnyObjectByType<MapAligner>();
+        if (aligner == null) aligner = gameObject.AddComponent<MapAligner>();
         if (useTestRoute) LoadRoute(TestRoute());
     }
 
@@ -59,6 +66,7 @@ public class RouteController : MonoBehaviour
         Arrived = (s == null || s.Length == 0);
         HasRoute = !Arrived;
         hasAnchor = false;
+        RouteVersion++;
         Debug.Log("RouteController: loaded " + (s != null ? s.Length : 0) + " steps");
     }
 
@@ -91,7 +99,13 @@ public class RouteController : MonoBehaviour
 
         Vector3 fromStart = p - stepStartPos;
         fromStart.y = 0f;
-        walked = fromStart.magnitude;
+
+        // once the map is aligned, only movement ALONG the corridor counts — walking the
+        // wrong way makes no progress. Before alignment, plain displacement (as before).
+        if (aligner != null && aligner.Aligned && steps != null && StepIndex < steps.Length)
+            walked = Mathf.Max(0f, Vector3.Dot(fromStart, aligner.WorldDirFor(steps[StepIndex].bearing)));
+        else
+            walked = fromStart.magnitude;
 
         // advance past any steps now finished (re-anchor each time; handles a chained arrive too)
         while (!Arrived)
@@ -115,9 +129,9 @@ public class RouteController : MonoBehaviour
     {
         return new[]
         {
-            new Step { direction = "straight", distance = 5f },
-            new Step { direction = "left",     distance = 4f },
-            new Step { direction = "arrive",   distance = 0f },
+            new Step { direction = "straight", distance = 5f, bearing = 90f },
+            new Step { direction = "left",     distance = 4f, bearing = 180f },
+            new Step { direction = "arrive",   distance = 0f, bearing = 180f },
         };
     }
 }

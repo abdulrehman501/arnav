@@ -16,6 +16,7 @@ public class DestinationPicker : MonoBehaviour
 
     TMP_InputField startInput;
     TextMeshProUGUI status;
+    TextMeshProUGUI scanPrompt;
     RectTransform list;
     GameObject uiRoot;   // the picker's own canvas — hide this, not the shared GameObject
     QRScanner scanner;
@@ -49,6 +50,16 @@ public class DestinationPicker : MonoBehaviour
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         scaler.referenceResolution = new Vector2(1080, 1920);
         canvasGO.AddComponent<GraphicRaycaster>();
+
+        // big top-of-screen prompt, visible until the QR is scanned
+        scanPrompt = MakeLabel("ScanPrompt", canvasGO.transform, 64, "SCAN THE QR CODE", TextAlignmentOptions.Center);
+        scanPrompt.fontStyle = FontStyles.Bold;
+        scanPrompt.color = Color.white;
+        var sp = scanPrompt.rectTransform;
+        sp.anchorMin = sp.anchorMax = new Vector2(0.5f, 1f);
+        sp.pivot = new Vector2(0.5f, 1f);
+        sp.anchoredPosition = new Vector2(0f, -60f);
+        sp.sizeDelta = new Vector2(1000f, 100f);
 
         // bottom panel
         var panel = NewRect("Panel", canvasGO.transform);
@@ -104,6 +115,7 @@ public class DestinationPicker : MonoBehaviour
         if (started || string.IsNullOrEmpty(start)) return;
         startNode = start;
         started = true;
+        if (scanPrompt != null) scanPrompt.gameObject.SetActive(false);
         if (scanner != null) scanner.Stop();
         if (list != null) list.gameObject.SetActive(true);
         SetStatus("you are at " + start + " — pick a destination");

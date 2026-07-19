@@ -7538,7 +7538,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc6f7ba47eaaf144e9d6ba7b77c88a94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RouteController
-  useTestRoute: 1
+  useTestRoute: 0
   maxStepDelta: 0.5
 --- !u!4 &1988311395
 Transform:

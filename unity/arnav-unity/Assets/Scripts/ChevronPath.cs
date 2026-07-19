@@ -19,6 +19,7 @@ public class ChevronPath : MonoBehaviour
     Transform[] chevrons;
     ARRaycastManager raycaster;
     Camera cam;
+    MapAligner aligner;
     static readonly List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
     readonly List<Renderer> rends = new List<Renderer>();
@@ -30,6 +31,7 @@ public class ChevronPath : MonoBehaviour
     {
         cam = Camera.main;
         if (route == null) route = FindAnyObjectByType<RouteController>();
+        aligner = FindAnyObjectByType<MapAligner>();
 
         raycaster = FindAnyObjectByType<ARRaycastManager>();
         if (raycaster == null)
@@ -109,14 +111,25 @@ public class ChevronPath : MonoBehaviour
                 Pose hit = hits[0].pose;
                 transform.position = hit.position + Vector3.up * 0.06f;
 
-                Vector3 fwd = cam.transform.forward;
-                fwd.y = 0f;
-                if (fwd.sqrMagnitude < 0.0001f) fwd = Vector3.forward;
-                Quaternion baseRot = Quaternion.LookRotation(fwd.normalized, Vector3.up);
-
-                float yaw = (route != null && route.HasRoute && !route.Arrived)
-                    ? TargetYaw(route.CurrentDirection) : 0f;
-                Quaternion target = baseRot * Quaternion.Euler(0f, yaw, 0f);
+                bool navigating = route != null && route.HasRoute && !route.Arrived;
+                Quaternion target;
+                if (navigating && aligner == null) aligner = FindAnyObjectByType<MapAligner>();
+                if (navigating && aligner != null && aligner.Aligned)
+                {
+                    // map is aligned: the arrows point down the REAL corridor for this leg,
+                    // and stay pointing there no matter which way the phone is turned
+                    target = Quaternion.Euler(0f, aligner.WorldYawFor(route.CurrentBearing), 0f);
+                }
+                else
+                {
+                    // not aligned yet: previous behaviour — ahead of the camera, leaning into turns
+                    Vector3 fwd = cam.transform.forward;
+                    fwd.y = 0f;
+                    if (fwd.sqrMagnitude < 0.0001f) fwd = Vector3.forward;
+                    Quaternion baseRot = Quaternion.LookRotation(fwd.normalized, Vector3.up);
+                    float yaw = navigating ? TargetYaw(route.CurrentDirection) : 0f;
+                    target = baseRot * Quaternion.Euler(0f, yaw, 0f);
+                }
                 transform.rotation = Quaternion.Slerp(transform.rotation, target, turnSpeed * Time.deltaTime);
             }
         }
