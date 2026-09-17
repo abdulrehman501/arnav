@@ -41,7 +41,7 @@ Delivered to a real client and verified end to end: server tested live (real 200
 
 ## My role
 
-Owned the full Unity/AR side end-to-end: scene setup, ARCore integration, QR scanning, the chevron rendering + orientation-lock system, distance tracking, and the Android build pipeline. Backend routing engine (Dijkstra + bearing computation) built by a collaborating teammate over the shared API contract above.
+Built both halves. The Unity/AR app: scene setup, ARCore integration, QR scanning, the chevron rendering + orientation-lock system, distance tracking, and the Android build pipeline. The FastAPI routing backend: Dijkstra, bearing computation and its unit tests. A teammate set up the first API contract and an early outdoor prototype before handing the project over.
 
 ## Repository layout
 

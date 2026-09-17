@@ -1,8 +1,7 @@
 # ARNAV — code & writing style guide
 
-House conventions so our code and docs read consistently across both halves of the
-project. Keep it short; the goal is work that reads like one team wrote it, by
-hand.
+Conventions so the code and docs read consistently across both halves of the
+project — the Unity client and the Python server. Keep it short.
 
 ## Code
 
@@ -39,15 +38,16 @@ hand.
 - Skip overused buzzwords (delve, leverage, seamless, robust, tapestry,
   showcase) unless they're literally the right word.
 
-## Git
+## Project files
 
-- **Commit messages:** short imperative summary line, then bullet points for
-  detail. Describe what changed and why.
-- **No AI co-author trailers** on commits (this is an assessed project).
-- Commit source, not generated output (see `.gitignore`). Review staged files
-  before committing.
+- Keep source and configuration in the project; keep generated output (Unity's
+  `Library/`, `Temp/`, build artefacts, Python virtual environments and caches)
+  out of it. Those are rebuilt automatically and differ per machine.
+- Do not put credentials, tokens, or personal server addresses in source or
+  documentation. Those are environment-specific and belong only on the machine
+  running the project.
 
 ## Why this exists
 
-Consistent, hand-written-looking style keeps the codebase coherent and is part of
-keeping the project's work genuinely our own.
+Consistent style keeps the codebase coherent and keeps the two halves of the
+project readable to anyone picking it up.

@@ -10,7 +10,7 @@ using UnityEngine.Networking;
 public class MapClient : MonoBehaviour
 {
     [Tooltip("Server base URL (ngrok tunnel) — set per deployment")]
-    public string baseUrl = "https://tastiness-silly-strife.ngrok-free.dev";
+    public string baseUrl = "https://your-ngrok-domain.ngrok-free.dev";
 
     // Some networks (carrier NAT, Wi-Fi with TLS inspection) break Unity's TLS
     // handshake even though browsers cope. The tunnel serves both schemes, so try

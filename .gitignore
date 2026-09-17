@@ -78,11 +78,6 @@ ENV/
 .ipynb_checkpoints/
 
 # ----------------------------
-#  Local-only (not shared)
-# ----------------------------
-CLAUDE.md
-
-# ----------------------------
 #  OS / editor noise
 # ----------------------------
 .DS_Store

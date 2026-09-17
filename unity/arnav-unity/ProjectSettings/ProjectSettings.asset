@@ -167,8 +167,8 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.unity.template.ar_mobile
-    Standalone: com.unity.template.ar-mobile
+    Android: com.arnav.indoornav
+    Standalone: com.arnav.indoornav
     iPhone: com.unity.template.armobile
   buildNumber:
     Bratwurst: 0
@@ -933,11 +933,11 @@ PlayerSettings:
   activeInputHandler: 1
   windowsGamepadBackendHint: 0
   enableDirectStorage: 0
-  cloudProjectId: 85502c83-0988-4d5c-af0b-45e26f9c4c3e
+  cloudProjectId: 
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: arnav-unity
-  organizationId: ibravo0011
+  organizationId: 
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}

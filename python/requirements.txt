@@ -1,6 +1,4 @@
-# Python backend dependencies (Sami's domain)
-fastapi
-uvicorn[standard]
-numpy
-scipy
-opencv-python
+fastapi==0.136.3
+uvicorn==0.48.0
+pydantic==2.13.4
+pyngrok==8.1.2

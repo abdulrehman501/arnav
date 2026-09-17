@@ -1,0 +1,12 @@
+{
+  "_comment": "v2 coordinate map. x = east, y = north, in metres from the entrance. Edge distance and turn direction are computed from these coordinates, not hand-typed. Same demo geometry as the original handoff: ENTRANCE -> ROOM_101 straight 2.5 m, ROOM_101 -> ROOM_102 right turn 2.5 m.",
+  "nodes": {
+    "ENTRANCE": { "x": 0, "y": 0,   "type": "entrance", "qr_facing": 90 },
+    "ROOM_101": { "x": 0, "y": 2.5, "type": "room" },
+    "ROOM_102": { "x": 2.5, "y": 2.5, "type": "room" }
+  },
+  "edges": [
+    { "a": "ENTRANCE", "b": "ROOM_101" },
+    { "a": "ROOM_101", "b": "ROOM_102" }
+  ]
+}
